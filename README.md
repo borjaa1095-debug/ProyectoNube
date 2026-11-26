@@ -75,7 +75,7 @@ En CloudShell, coloca `desplegar.sh` y `user-data1.sh` en la misma carpeta, revi
 bash -n desplegar.sh && bash desplegar.sh
 ```
 
-La captura de CloudShell muestra el mismo ID en ambas ejecuciones. La captura del navegador muestra la web que abrió la URL devuelta. Queda documentar el coste de la instancia de prueba y su limpieza después de grabar.
+La captura de CloudShell muestra el mismo ID en ambas ejecuciones. La captura del navegador muestra la web que abrió la URL devuelta.
 
 ![captura de CloudShell](img/20a-consola-cloudshell.png)
 
@@ -83,4 +83,4 @@ La captura de CloudShell muestra el mismo ID en ambas ejecuciones. La captura de
 
 ## Uso de IA
 
-Utilicé ChatGPT para realizar un paso a paso del proyecto completo y ayudarme a hacer el README.md
+Utilicé ChatGPT para realizar un paso a paso del proyecto y ayudarme a hacer el README.md

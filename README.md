@@ -10,12 +10,15 @@ Despliegue de dos versiones de una web estática con Nginx en AWS Academy Learne
 
 La VPC `libreria-vpc` usa el bloque `10.0.0.0/16`. La subred `libreria-publica` usa `10.0.1.0/24` en `us-east-1a`. La subred es pública porque su tabla de rutas, `libreria-rt-publica`, envía el tráfico con destino `0.0.0.0/0` a la puerta de enlace `libreria-igw`. La asignación automática de IPv4 pública está habilitada.
 
-| Recurso | Captura |
-| --- | --- |
-| VPC | [Detalles](img/01-vpc.png) |
-| Subred | [Detalles](img/02-subred.png) y [asignación de IPv4](img/03-subred-ip-publica.png) |
-| Internet Gateway | [Asociación con la VPC](img/04-igw.png) |
-| Tabla de rutas | [Rutas](img/05-rutas.png) |
+![Detalles](img/01-vpc.png)
+
+![Detalles](img/02-subred.png)
+
+![asignación de IPv4](img/03-subred-ip-publica.png)
+
+![Asociación con la VPC](img/04-igw.png)
+
+![Rutas](img/05-rutas.png)
 
 ## Grupo de seguridad (B2)
 
@@ -27,25 +30,42 @@ La VPC `libreria-vpc` usa el bloque `10.0.0.0/16`. La subred `libreria-publica` 
 
 `libreria-web` es una instancia EC2 `t3.micro` con Amazon Linux 2023 y el par de claves `vockey`. Los datos de usuario de [user-data1.sh](scripts/user-data1.sh) instalan Nginx, publican la primera versión y arrancan el servicio.
 
-- [Detalles de EC2](img/08a-detalles-instancia.png) y [captura adicional](img/08b-detalles-instancia.png).
-- [Etiquetas](img/09-etiquetas.png).
-- [Versión 1 en el navegador](img/10-web-v1.png).
-- [Prueba de acceso SSH](img/11-ssh.png).
+![Detalles de EC2](img/08a-detalles-instancia.png)
+
+![captura adicional](img/08b-detalles-instancia.png)
+
+![Etiquetas](img/09-etiquetas.png)
+
+![Versión 1 en el navegador](img/10-web-v1.png)
+
+![Prueba de acceso SSH](img/11-ssh.png)
 
 ## DNS privado ponderado (nivel medio)
 
-La segunda EC2 publica la [versión 2](img/13-web-v2.png) con [user-data2.sh](scripts/user-data2.sh). La [zona privada libreria.lab](img/14-zona-alojada.png) está asociada a la VPC. Los dos [registros A ponderados](img/15-registros-dns.png) responden al nombre `web.libreria.lab`.
+La segunda EC2 publica la versión 2 con [user-data2.sh](scripts/user-data2.sh). La zona privada libreria.lab está asociada a la VPC. Los dos registros A ponderados responden al nombre `web.libreria.lab`.
 
 | Registro | IPv4 privada | Peso |
 | --- | --- | ---: |
 | `version-1` | `10.0.1.240` | 80 |
 | `version-2` | `10.0.1.59` | 20 |
 
-La [prueba desde EC2 por SSH](img/16-prueba-dns-ssh.png) muestra ambas versiones al consultar el mismo nombre con `dig` y `curl`. Se dejó un TTL de 10 segundos para repetir la consulta con una pausa de 11 segundos.
+La prueba desde EC2 por SSH muestra ambas versiones al consultar el mismo nombre con `dig` y `curl`. Se dejó un TTL de 10 segundos para repetir la consulta con una pausa de 11 segundos.
+
+![versión 2](img/13-web-v2.png)
+
+![zona privada libreria.lab](img/14-zona-alojada.png)
+
+![registros A ponderados](img/15-registros-dns.png)
+
+![prueba desde EC2 por SSH](img/16-prueba-dns-ssh.png)
 
 ## Presupuesto (B4 y nivel medio)
 
-Las capturas de la calculadora muestran [7,60 USD/mes](img/12-presupuesto.png) y [3,80 USD/mes](img/17-presupuesto-medio.png). Esta última solo muestra Amazon EC2. Queda confirmar qué incluye cada estimación y añadir los enlaces compartidos. La estimación del nivel medio debe incluir dos EC2 encendidas 24/7, sus discos, sus IPv4 públicas y la zona privada de Route 53. Para reducir el coste de cómputo durante las pruebas se pueden detener las instancias cuando no se estén usando.
+Las capturas de la calculadora muestran 7,60 USD/mes y 3,80 USD/mes. Esta última solo muestra Amazon EC2. Queda confirmar qué incluye cada estimación y añadir los enlaces compartidos. La estimación del nivel medio debe incluir dos EC2 encendidas 24/7, sus discos, sus IPv4 públicas y la zona privada de Route 53. Para reducir el coste de cómputo durante las pruebas se pueden detener las instancias cuando no se estén usando.
+
+![7,60 USD/mes](img/12-presupuesto.png)
+
+![3,80 USD/mes](img/17-presupuesto-medio.png)
 
 ## Despliegue con AWS CLI (nivel avanzado)
 
@@ -57,7 +77,11 @@ En CloudShell, coloca `desplegar.sh` y `user-data1.sh` en la misma carpeta, revi
 bash -n desplegar.sh && bash desplegar.sh
 ```
 
-La [captura de CloudShell](img/20a-consola-cloudshell.png) muestra el mismo ID en ambas ejecuciones. La [captura del navegador](img/20b-segunda-ejecucion.png) muestra la web que abrió la URL devuelta. Queda documentar el coste de la instancia de prueba y su limpieza después de grabar.
+La captura de CloudShell muestra el mismo ID en ambas ejecuciones. La captura del navegador muestra la web que abrió la URL devuelta. Queda documentar el coste de la instancia de prueba y su limpieza después de grabar.
+
+![captura de CloudShell](img/20a-consola-cloudshell.png)
+
+![captura del navegador](img/20b-segunda-ejecucion.png)
 
 ## Vídeo de demostración
 
